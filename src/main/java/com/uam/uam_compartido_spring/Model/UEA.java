@@ -6,7 +6,7 @@ import lombok.Setter;
 /**
  * @author diego
  */
-@Entity
+@Entity(name = "uea")
 @Setter
 @Getter
 public class UEA {

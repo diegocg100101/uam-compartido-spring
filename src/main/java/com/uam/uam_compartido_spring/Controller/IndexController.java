@@ -2,15 +2,16 @@ package com.uam.uam_compartido_spring.Controller;
 
 import com.uam.uam_compartido_spring.Model.Grupo;
 import com.uam.uam_compartido_spring.Model.UEA;
+import com.uam.uam_compartido_spring.Model.Unidad;
+import com.uam.uam_compartido_spring.Repository.UeaRepository;
+import com.uam.uam_compartido_spring.Repository.UnidadRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author diego
@@ -18,6 +19,12 @@ import java.util.Map;
 @RestController
 @RequestMapping
 public class IndexController {
+
+    @Autowired
+    private UnidadRepository unidadRepository;
+
+    @Autowired
+    private UeaRepository ueaRepository;
 
     @GetMapping("/")
     public ResponseEntity<Map<String, Object>> index() {
