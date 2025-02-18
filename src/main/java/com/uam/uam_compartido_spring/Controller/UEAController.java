@@ -53,9 +53,15 @@ public class UEAController {
     }
 
     @PostMapping("/add")
-    private void add(@RequestBody UEA uea) {
-        ueaRepository.save(uea);
+    private ResponseEntity<String> add(@RequestBody UEA uea) {
+        try {
+            ueaRepository.save(uea);
+            return ResponseEntity.ok("UEA dada de alta exitosamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Error al dar de alta la UEA");
+        }
     }
+
 
     @GetMapping("/list")
     private ResponseEntity<Map<String, Object>> list() {
@@ -66,12 +72,22 @@ public class UEAController {
     }
 
     @GetMapping("/delete/{clave}")
-    private void delete(@PathVariable("clave") String clave) {
-        ueaRepository.deleteById(clave);
+    private ResponseEntity<String> delete(@PathVariable("clave") String clave) {
+        try {
+            ueaRepository.deleteById(clave);
+            return ResponseEntity.ok("Eliminado correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("No se pudo eliminar");
+        }
     }
 
     @PostMapping("/edit/{clave}")
-    private void edit(@PathVariable("clave") String clave, @RequestBody UEA uea) {
-        /* TODO */
+    private ResponseEntity<String> edit(@PathVariable("clave") String clave, @RequestBody UEA uea) {
+        if (ueaRepository.existsById(clave)) {
+            ueaRepository.save(uea);
+            return ResponseEntity.ok("UEA editada");
+        } else{
+            return ResponseEntity.status(404).body("UEA con clave " + clave + " no encontrada");
+        }
     }
 }

@@ -61,8 +61,13 @@ public class GruposController {
     }
 
     @PostMapping("/add")
-    private void addGrupo(@RequestBody Grupo grupo) {
-        grupoRepository.save(grupo);
+    private ResponseEntity<String> addGrupo(@RequestBody Grupo grupo) {
+        try {
+            grupoRepository.save(grupo);
+            return ResponseEntity.ok("Grupo dado de alta correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Error al dar de alta el grupo");
+        }
     }
 
     @GetMapping("/list")
