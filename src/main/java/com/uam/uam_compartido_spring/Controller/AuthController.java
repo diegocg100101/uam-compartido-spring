@@ -60,6 +60,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequestDTO authDTO) {
-        return ResponseEntity.ok(authService.authenticate(authDTO));
+            return ResponseEntity.ok(authService.authenticate(authDTO));
     }
 }

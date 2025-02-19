@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author diego
  */
 @RestController
 @RequestMapping("/uea")
-@CrossOrigin(origins = "http://localhost:4200")
 public class UEAController {
     @Autowired
     private UnidadRepository unidadRepository;
@@ -36,7 +36,7 @@ public class UEAController {
     private UeaRepository ueaRepository;
 
     @GetMapping("/add")
-    private ResponseEntity<Map<String, Object>> add() {
+    public ResponseEntity<Map<String, Object>> add() {
         Map<String, Object> response = new HashMap<>();
 
         List<Unidad> unidades = unidadRepository.findAll();
@@ -48,13 +48,11 @@ public class UEAController {
         List<Trimestre> trimestres = trimestreRepository.findAll();
         response.put("trimestres", trimestres);
 
-        response.put("uea", new UEA());
-
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/add")
-    private ResponseEntity<String> add(@RequestBody UEA uea) {
+    public ResponseEntity<String> add(@RequestBody UEA uea) {
         try {
             ueaRepository.save(uea);
             return ResponseEntity.ok("UEA dada de alta exitosamente");
@@ -65,7 +63,7 @@ public class UEAController {
 
 
     @GetMapping("/list")
-    private ResponseEntity<Map<String, Object>> list() {
+    public ResponseEntity<Map<String, Object>> list() {
         Map<String, Object> response = new HashMap<>();
         List<UEA> ueas = ueaRepository.findAll();
         response.put("ueas", ueas);
@@ -73,7 +71,7 @@ public class UEAController {
     }
 
     @GetMapping("/delete/{clave}")
-    private ResponseEntity<String> delete(@PathVariable("clave") String clave) {
+    public ResponseEntity<String> delete(@PathVariable("clave") String clave) {
         try {
             ueaRepository.deleteById(clave);
             return ResponseEntity.ok("Eliminado correctamente");
@@ -82,13 +80,35 @@ public class UEAController {
         }
     }
 
-    @PostMapping("/edit/{clave}")
-    private ResponseEntity<String> edit(@PathVariable("clave") String clave, @RequestBody UEA uea) {
-        if (ueaRepository.existsById(clave)) {
+    @GetMapping("/edit/{clave}")
+    public ResponseEntity<Map<String, Object>> edit(@PathVariable("clave") String clave) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Optional<UEA> uea = ueaRepository.findById(clave);
+            response.put("uea", uea.get());
+
+            List<Unidad> unidades = unidadRepository.findAll();
+            response.put("unidades", unidades);
+
+            List<Tronco> troncos = troncoRepository.findAll();
+            response.put("troncos", troncos);
+
+            List<Trimestre> trimestres = trimestreRepository.findAll();
+            response.put("trimestres", trimestres);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(response);
+        }
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<String> edit(@RequestBody UEA uea) {
+        if (ueaRepository.existsById(uea.getClave())) {
             ueaRepository.save(uea);
             return ResponseEntity.ok("UEA editada");
         } else{
-            return ResponseEntity.status(404).body("UEA con clave " + clave + " no encontrada");
+            return ResponseEntity.status(404).body("UEA con clave " + uea.getClave() + " no encontrada");
         }
     }
 }

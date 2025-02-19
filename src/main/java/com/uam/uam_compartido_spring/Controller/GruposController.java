@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author diego
@@ -79,4 +76,44 @@ public class GruposController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/edit/{clave}")
+    public ResponseEntity<Map<String, Object>> edit(@PathVariable("clave") String clave) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Optional<Grupo> grupo = grupoRepository.findById(clave);
+            response.put("grupo", grupo.get());
+
+            List<UEA> ueas = ueaRepository.findAll();
+            response.put("ueas", ueas);
+
+            List<Unidad> unidades = unidadRepository.findAll();
+            response.put("unidades", unidades);
+
+            List<Salon> salones = salonRepository.findAll();
+            response.put("salones", salones);
+
+            List<String> dias = Arrays.asList("Lunes", "Martes", "Miércoles", "Jueves", "Viernes");
+            response.put("dias", dias);
+
+            List<String> horas = Arrays.asList("08:00 - 09:30", "09:30 - 11:00", "11:00 - 12:30", "12:30 - 14:00",
+                    "14:00 - 15:30", "15:30 - 17:00", "17:00 - 19:00");
+            response.put("horas", horas);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(response);
+        }
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<String> edit(@RequestBody Grupo grupo) {
+        if (grupoRepository.existsById(grupo.getClaveGrupo())){
+            grupoRepository.save(grupo);
+            return ResponseEntity.ok("Grupo editada");
+        } else {
+            return ResponseEntity.status(404).body("Grupo con clave " + grupo.getClaveGrupo() + " no encontrada");
+        }
+    }
+
 }
