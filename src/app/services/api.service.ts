@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { response } from 'express';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,10 @@ export class ApiService {
 
   // Método para consumir el API con el método GET
   public get(endpoint: string) {
-    return this.httpClient.get(`${this.host}${endpoint}`, {responseType: 'text', withCredentials: true});
+    return this.httpClient.get(`${this.host}${endpoint}`, { withCredentials: true});
   }
 
+  public post(endpoint: string, body: any) {
+    return this.httpClient.post(`${this.host}${endpoint}`, body, { withCredentials: true});
+  }
 }
