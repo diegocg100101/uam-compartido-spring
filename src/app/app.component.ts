@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ApiService } from './services/api.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +9,16 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'uam-compartido-angular';
+  title = 'uam-compartido';
+  data: any[] = [];
+
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit() {
+    this.apiService.get('/').subscribe((data: any) => {
+      this.data = data;
+      console.log(data);
+    });
+  }
+  
 }
