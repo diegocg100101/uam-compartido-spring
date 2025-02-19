@@ -11,11 +11,11 @@ export class ApiService {
   constructor(private httpClient: HttpClient) { }
 
   // Método para consumir el API con el método GET
-  public get(endpoint: string) {
+  public getRequest(endpoint: string) {
     return this.httpClient.get(`${this.host}${endpoint}`, { withCredentials: true});
   }
 
-  public post(endpoint: string, body: any) {
+  public postRequest(endpoint: string, body: any) {
     return this.httpClient.post(`${this.host}${endpoint}`, body, { withCredentials: true});
   }
 }
