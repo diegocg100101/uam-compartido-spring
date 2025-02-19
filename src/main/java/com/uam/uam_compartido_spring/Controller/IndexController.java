@@ -27,7 +27,7 @@ public class IndexController {
     private UeaRepository ueaRepository;
 
     @GetMapping("/")
-    public ResponseEntity<Map<String, Object>> index() {
-        return ResponseEntity.ok(new HashMap<>());
+    public ResponseEntity<String> index() {
+        return ResponseEntity.ok("Bienvenido a la API de UAM Compartido");
     }
 }

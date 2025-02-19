@@ -21,6 +21,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/uea")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UEAController {
     @Autowired
     private UnidadRepository unidadRepository;
