@@ -2,24 +2,19 @@ import { Component } from '@angular/core';
 import { ApiService } from './services/api.service';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { UserModel } from './models/user-model';
 import { UserLogin } from './models/user-login';
+import { MainComponent } from "./main/main.component";
 
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, FooterComponent],
+  imports: [HeaderComponent, FooterComponent, MainComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   response: any[] = [];
-  user : UserLogin = new UserLogin();
-  
-  constructor(private apiService: ApiService) {}
+  user: UserLogin = new UserLogin();
 
-  ngOnInit() {
-    this.user.email = 'usuario@example.com';
-    this.user.password = '186251';
-  }
-  
+  constructor(private apiService: ApiService) { }
+
 }

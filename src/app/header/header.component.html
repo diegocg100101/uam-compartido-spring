@@ -1,59 +1,27 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/">
-            <img src="/img/logo2.png" width="70" height="60" class="d-inline-block align-center" alt="">
-            UAM Compartido
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-
-                <li class="nav-item dropdown ms-5">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-lg btn-outline-info dropdown-toggle text-white"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            UEAs
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item">Alta UEA</a></li>
-                            <li><a class="dropdown-item">Búsqueda</a></li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="nav-item dropdown ms-2">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-lg btn-outline-info dropdown-toggle text-white"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Grupos
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item">Alta de
-                                    grupo</a></li>
-                            <li><a class="dropdown-item">Lista de grupos</a></li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="ms-2 nav-item btn btn-outline-success btn-sm">
-                    <a class="nav-link text-white"><i class="bi bi-person"></i> Mis datos</a>
-                </li>
-                <li class="ms-2 nav-item btn btn-outline-success btn-sm">
-                    <a class="nav-link text-white">Ingresar</a>
-                </li>
-                <li class="ms-2 nav-item btn btn-outline-warning btn-sm">
-                    <a class="nav-link text-white"><i class="bi bi-person-plus"></i> Registrar</a>
-                </li>
-                <li class="ms-2 nav-item btn btn-outline-danger btn-sm">
-                    <a class="nav-link text-white"><i class="bi bi-box-arrow-right"></i> Salir</a>
-                </li>
-                <li class="ms-2 mt-1 nav-item ">
-                    <a class="nav-link text-white">Acerca de</a>
-                </li>
-            </ul>
+<header>
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/img/logo2.png" width="70" height="60" class="d-inline-block align-center" alt="">
+                UAM Compartido
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">    
+                    <li class="ms-2 nav-item btn btn-outline-success btn-sm">
+                        <a class="nav-link text-white"><i class="bi bi-person"></i> Mis datos</a>
+                    </li>
+                    <li class="ms-2 nav-item btn btn-outline-danger btn-sm">
+                        <a class="nav-link text-white"><i class="bi bi-box-arrow-right"></i> Salir</a>
+                    </li>
+                    <li class="ms-2 mt-1 nav-item">
+                        <a class="nav-link text-white">Acerca de</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</header>
