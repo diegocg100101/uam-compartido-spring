@@ -1,7 +1,7 @@
 <header>
-    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" routerLink="/">
                 <img src="/img/logo2.png" width="70" height="60" class="d-inline-block align-center" alt="">
                 UAM Compartido
             </a>
@@ -11,14 +11,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">    
-                    <li class="ms-2 nav-item btn btn-outline-success btn-sm">
-                        <a class="nav-link text-white"><i class="bi bi-person"></i> Mis datos</a>
-                    </li>
-                    <li class="ms-2 nav-item btn btn-outline-danger btn-sm">
-                        <a class="nav-link text-white"><i class="bi bi-box-arrow-right"></i> Salir</a>
+                    <li class="ms-2 mt-1 nav-item">
+                        <a routerLink="/acercade" class="nav-link text-white">Acerca de</a>
                     </li>
                     <li class="ms-2 mt-1 nav-item">
-                        <a class="nav-link text-white">Acerca de</a>
+                        <img src="/img/unidades.png" alt="Logo unidades" width="150" height="30" class="d-inline-block align-center">
                     </li>
                 </ul>
             </div>

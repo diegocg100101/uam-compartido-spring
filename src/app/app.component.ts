@@ -3,11 +3,12 @@ import { ApiService } from './services/api.service';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { UserLogin } from './models/user-login';
-import { MainComponent } from "./main/main.component";
+import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, FooterComponent, MainComponent],
+  imports: [HeaderComponent, FooterComponent, RouterOutlet, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

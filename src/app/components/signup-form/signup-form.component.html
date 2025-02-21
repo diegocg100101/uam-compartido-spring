@@ -1,0 +1,23 @@
+<div class="card text-bg-dark">
+    <div class="card-header mt-5"> 
+        <img src="/img/pantera.png" alt="Logo pantera" width="70" height="60">
+        <h1>¡Bienvenido!</h1>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Regístrate</h5>
+        <form method="post" id="formLogin" class="w-75 mx-auto mb-5">
+            <div class="mb-3">
+                <label for="email" class="form-label">Usuario:</label>
+                <input type="text" class="form-control" id="email" placeholder="Ingresa tu correo">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña:</label>
+                <input type="password" class="form-control" id="password" placeholder="Ingresa tu contraseña">
+            </div>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-success me-3">Enviar</button>
+                <a routerLink="/" class="btn btn-primary">Iniciar sesión</a>
+            </div>
+        </form>
+    </div>
+</div>
