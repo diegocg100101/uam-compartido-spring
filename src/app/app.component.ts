@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ApiService } from './services/api.service';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { UserLogin } from './models/user-login';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
