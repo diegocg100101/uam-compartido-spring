@@ -1,0 +1,32 @@
+.nav-link {
+    color: white !important; /* Cambia el color del texto a blanco */
+}
+
+.nav-link:hover {
+    color: #ccc !important; /* Cambia el color del texto al pasar el ratón por encima */
+}
+
+.nav-link.active {
+    background-color: #495057; /* Fondo para el enlace activo */
+    color: white !important; /* Asegura que el texto del enlace activo sea blanco */
+}
+
+.sidebar {
+    height: 100vh; /* Asegura que el sidebar ocupe toda la altura de la ventana */
+    background-color: #422742; /* Color de fondo diferente para el sidebar */
+    color: white;
+    padding: 15px;
+}
+
+.sidebar .nav-link {
+    color: white !important; /* Cambia el color del texto a blanco */
+}
+
+.sidebar .nav-link:hover {
+    color: #ccc !important; /* Cambia el color del texto al pasar el ratón por encima */
+}
+
+.sidebar .nav-link.active {
+    background-color: #495057; /* Fondo para el enlace activo */
+    color: white !important; /* Asegura que el texto del enlace activo sea blanco */
+}
