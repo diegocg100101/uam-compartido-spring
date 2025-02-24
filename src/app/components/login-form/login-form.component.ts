@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, Validator, ReactiveFormsModule } from '@angular/forms';
 import { UserLogin } from '../../models/user-login';
@@ -16,7 +16,7 @@ export class LoginFormComponent {
 
   modal = false;
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private router: Router) { }
 
 
   formulario = new FormGroup({
@@ -27,9 +27,10 @@ export class LoginFormComponent {
   login: UserLogin = new UserLogin();
 
   enviar() {
-    console.log(this.formulario.value);
     this.api.postRequest('/auth/login', this.formulario.value).subscribe((data: any) => {
+      /* TODO */
       localStorage.setItem('token', data.token);
+      this.router.navigate(['/menu'])
     });
   }
 }

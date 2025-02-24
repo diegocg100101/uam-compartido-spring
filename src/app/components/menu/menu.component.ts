@@ -9,4 +9,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 })
 export class MenuComponent {
 
+  logout() {
+    localStorage.removeItem('token');
+  }
 }
