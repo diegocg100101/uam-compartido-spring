@@ -15,6 +15,7 @@ import { ApiService } from '../../services/api.service';
 export class LoginFormComponent {
 
   modal = false;
+  mensaje = 'Usuario o constraseña incorrecta';
 
   constructor(private api: ApiService, private router: Router) { }
 
@@ -27,10 +28,15 @@ export class LoginFormComponent {
   login: UserLogin = new UserLogin();
 
   enviar() {
-    this.api.postRequest('/auth/login', this.formulario.value).subscribe((data: any) => {
-      /* TODO */
-      localStorage.setItem('token', data.token);
-      this.router.navigate(['/menu'])
+    this.api.postRequest('/auth/login', this.formulario.value).subscribe({
+      next : (data : any) => {
+        localStorage.setItem('token', data.token);
+        this.router.navigate(['/menu']);
+      },
+      error : (error : any) => {
+        console.log(error);
+        this.modal = true
+      }
     });
   }
 }

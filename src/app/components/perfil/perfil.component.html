@@ -1,1 +1,40 @@
-<p>perfil works!</p>
+<div class="card text-bg-dark shadow-lg  rounded-4">
+    <div class="row g-0 align-items-center">
+        <div class="col-md-4 text-center p-4">
+            <img src="/img/user.png" class="img-fluid" width="120">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h3 class="card-title fw-bold">
+                    <span></span>
+                </h3>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent text-light">
+                        <strong>No. económico: </strong>
+                        <span>{{ user.noeconomico }}</span>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light">
+                        <strong>Nombre: </strong>
+                        <span>{{ user.nombre }}</span>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light">
+                        <strong>Departamento: </strong>
+                        <span>{{ user.departamento.nombre }}</span>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light">
+                        <strong>Unidad: </strong>
+                        <span>{{ user.unidad.nombre }}</span>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light">
+                        <strong>División: </strong>
+                        <span>{{ user.division.nombre }}</span>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light">
+                        <strong>Rol: </strong>
+                        <span>{{ user.rol.nombre }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

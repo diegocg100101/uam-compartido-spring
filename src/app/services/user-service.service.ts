@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,15 @@ export class UserServiceService {
     return this.httpClient.post(`${this.host}/auth/login`, user, { withCredentials: true });
   }
 
-  signup(user: any) {
-    return this.httpClient.post(`${this.host}/auth/signup`, user, { withCredentials: true });
+  signup(user: any) : Observable<any> {
+    return this.httpClient.post<any>(`${this.host}/auth/signup`, user, { withCredentials: true });
   }
 
-  getInformation() {
-    return this.httpClient.get(`${this.host}/auth/me`, { withCredentials: true });
+  getSignupInformation() : Observable<any>{
+    return this.httpClient.get<any>(`${this.host}/auth/signup`, { withCredentials: true });
+  }
+
+  getUserInformation() : Observable <any> {
+    return this.httpClient.get(`${this.host}/user/me`, { withCredentials: true });
   }
 }
