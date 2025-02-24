@@ -2,7 +2,9 @@ package com.uam.uam_compartido_spring.Service;
 
 import com.uam.uam_compartido_spring.DTO.AuthRequestDTO;
 import com.uam.uam_compartido_spring.DTO.AuthResponseDTO;
+import com.uam.uam_compartido_spring.Model.Rol;
 import com.uam.uam_compartido_spring.Model.Usuario;
+import com.uam.uam_compartido_spring.Repository.RolRepository;
 import com.uam.uam_compartido_spring.Repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,11 +23,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final RolRepository rolRepository;
 
     public AuthResponseDTO signup(Usuario usuario) {
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
 
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        usuario.setRol(rolRepository.getReferenceById(1));
         usuarioRepository.save(usuario);
         String jwtToken = jwtService.generateToken(usuario);
         return authResponseDTO.builder()

@@ -1,5 +1,6 @@
 package com.uam.uam_compartido_spring.Service;
 
+import com.uam.uam_compartido_spring.Model.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -31,15 +32,16 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(Usuario usuario) {
+        return generateToken(new HashMap<>(), usuario);
     }
 
-    public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
+    public String generateToken(Map<String, Object> claims, Usuario usuario) {
+        claims.put("role", usuario.getRol().getNombre());
         return Jwts
                 .builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(usuario.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 10000 * 60))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
