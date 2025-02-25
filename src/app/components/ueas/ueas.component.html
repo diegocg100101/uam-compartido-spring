@@ -7,28 +7,29 @@
                     <h3 class="text-center">Ingresa los datos</h3>
                 </div>
                 <div class="body p-5">
-                    <form>
+                    <form [formGroup]="formulario" (ngSubmit)="enviar()" method="post">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="clave" class="form-label">Clave</label>
-                                    <input type="text" class="form-control" id="clave" name="clave" required
-                                        placeholder="Ingresa la clave">
+                                    <input formControlName="clave" type="text" class="form-control" id="clave"
+                                        name="clave" required placeholder="Ingresa la clave">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="nombre" class="form-label">Nombre</label>
-                                    <input type="text" class="form-control" id="nombre" name="nombre" required
-                                        placeholder="Ingresa el nombre">
+                                    <input formControlName="nombre" type="text" class="form-control" id="nombre"
+                                        name="nombre" required placeholder="Ingresa el nombre">
                                 </div>
                             </div>
 
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="creditos" class="form-label">Créditos</label>
-                                    <input min="0" type="number" class="form-control" id="creditos" name="creditos"
-                                        required placeholder="Ingresa la cantidad de créditos">
+                                    <input formControlName="creditos" min="0" type="number" class="form-control"
+                                        id="creditos" name="creditos" required
+                                        placeholder="Ingresa la cantidad de créditos">
                                 </div>
                             </div>
                         </div>
@@ -37,10 +38,11 @@
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="unidad" class="form-label">Unidad</label>
-                                    <select class="form-select" id="unidad" name="unidad" required>
-                                        <option value=0>Selecciona una unidad</option>
-                                        <option th:each="unidad : ${unidades}" th:value="${unidad.IdUnidad}"
-                                            th:text="${unidad.Nombre}"></option>
+                                    <select id="unidad" class="form-select" formControlName="unidad" required>
+                                        <option value="" disabled selected>Selecciona una unidad</option>
+                                        <option *ngFor="let unidad of infoUea.unidades" [ngValue]="unidad">
+                                            {{ unidad.nombre }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -48,10 +50,12 @@
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="tronco" class="form-label">Tronco</label>
-                                    <select class="form-select" id="tronco" name="tronco" required>
-                                        <option value=0>Selecciona un tronco</option>
-                                        <option th:each="tronco : ${troncos}" th:value="${tronco.IdTronco}"
-                                            th:text="${tronco.Nombre}"></option>
+                                    <select class="form-select" id="tronco" name="tronco" formControlName="tronco"
+                                        required>
+                                        <option value="" disabled selected>Selecciona un tronco</option>
+                                        <option *ngFor="let tronco of infoUea.troncos" [ngValue]="tronco">
+                                            {{ tronco.nombre }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -59,10 +63,12 @@
                             <div class="col-lg-4">
                                 <div class="mb-3">
                                     <label for="trimestre" class="form-label">Trimestre</label>
-                                    <select class="form-select" id="trimestre" name="trimestre" required>
+                                    <select class="form-select" id="trimestre" name="trimestre"
+                                        formControlName="trimestre" required>
                                         <option value=0>Selecciona un trimestre</option>
-                                        <option th:each="trimestre : ${trimestres}" th:value="${trimestre.IdTrimestre}"
-                                            th:text="${trimestre.Nombre}"></option>
+                                        <option *ngFor="let trimestre of infoUea.trimestres" [ngValue]="trimestre">
+                                            {{ trimestre.nombre }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -76,8 +82,10 @@
             </div>
         </div>
 
-        <div class="col-lg-6 d-flex flex-column justify-content-center align-items-center ">
+        <div class="col-lg-6 d-flex flex-column justify-content-center">
             <h2 class="text-center">UEAs en plataforma</h2>
+            <input class="form-control mr-sm-2 mb-2" type="search" name="busqueda"
+                placeholder="Búsqueda por unidad, nombre o clave" aria-label="Search" (change)="buscar($event)">
             <table class="table table-dark table-striped text-center w-100">
                 <thead>
                     <tr>
@@ -91,20 +99,105 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                    <tr *ngFor="let uea of listaUea.ueas">
+                        <td>{{ uea.clave }}</td>
+                        <td>{{ uea.nombre }}</td>
+                        <td>{{ uea.unidad.nombre }}</td>
+                        <td>{{ uea.tronco.nombre }}</td>
+                        <td>{{ uea.trimestre.nombre }}</td>
+                        <td>{{ uea.creditos }}</td>
                         <td>
-                            <a class="btn btn-warning m-2 col-7"><i class="bi bi-pencil"></i></a>
-                            <a class="btn btn-danger m-2 col-7"><i class="bi bi-trash"></i></a>
+                            <a class="btn btn-warning m-2 col-7" data-bs-toggle="modal"
+                                data-bs-target="#editar" (click)="ponerInfo(uea)"><i class="bi bi-pencil"></i></a>
+                            <a class="btn btn-danger m-2 col-7" (click)="eliminar(uea.clave)"><i class="bi bi-trash"></i></a>
                         </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-bg-dark">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edita los datos de la UEA</h1>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formularioEditar" (ngSubmit)="editar()" method="post">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="clave" class="form-label">Clave</label>
+                                <input formControlName="clave" type="text" class="form-control" id="clave"
+                                    name="clave" required placeholder="Ingresa la clave" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input formControlName="nombre" type="text" class="form-control" id="nombre"
+                                    name="nombre" required placeholder="Ingresa el nombre">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="creditos" class="form-label">Créditos</label>
+                                <input formControlName="creditos" min="0" type="number" class="form-control"
+                                    id="creditos" name="creditos" required
+                                    placeholder="Ingresa la cantidad de créditos">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="unidad" class="form-label">Unidad</label>
+                                <select id="unidad" class="form-select" formControlName="unidad" required>
+                                    <option value="" disabled>Selecciona una unidad</option>
+                                    <option *ngFor="let unidad of infoUea.unidades" [ngValue]="unidad">
+                                        {{ unidad.nombre }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="tronco" class="form-label">Tronco</label>
+                                <select class="form-select" id="tronco" name="tronco" formControlName="tronco"
+                                    required>
+                                    <option value="" disabled>Selecciona un tronco</option>
+                                    <option *ngFor="let tronco of infoUea.troncos" [ngValue]="tronco">
+                                        {{ tronco.nombre }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="trimestre" class="form-label">Trimestre</label>
+                                <select class="form-select" id="trimestre" name="trimestre"
+                                    formControlName="trimestre" required>
+                                    <option value=0>Selecciona un trimestre</option>
+                                    <option *ngFor="let trimestre of infoUea.trimestres" [ngValue]="trimestre">
+                                        {{ trimestre.nombre }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

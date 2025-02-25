@@ -26,4 +26,8 @@ export class UserServiceService {
   getUserInformation() : Observable <any> {
     return this.httpClient.get(`${this.host}/user/me`, { withCredentials: true });
   }
+
+  getAllUsers() : Observable <any> {
+    return this.httpClient.get<any>(`${this.host}/user/all`, { withCredentials: true });
+  }
 }
