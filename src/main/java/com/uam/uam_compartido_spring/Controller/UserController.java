@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author diego
  */
@@ -26,4 +28,11 @@ public class UserController {
         Usuario usuario = (Usuario) auth.getPrincipal();
         return ResponseEntity.ok(usuario);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Usuario>> all() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        return ResponseEntity.ok(usuarios);
+    }
+    
 }

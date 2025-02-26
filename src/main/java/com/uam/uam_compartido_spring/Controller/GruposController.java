@@ -1,5 +1,6 @@
 package com.uam.uam_compartido_spring.Controller;
 
+import com.uam.uam_compartido_spring.DTO.UnidadesDTO;
 import com.uam.uam_compartido_spring.Model.Grupo;
 import com.uam.uam_compartido_spring.Model.Salon;
 import com.uam.uam_compartido_spring.Model.UEA;
@@ -113,6 +114,40 @@ public class GruposController {
             return ResponseEntity.ok("Grupo editada");
         } else {
             return ResponseEntity.status(404).body("Grupo con clave " + grupo.getClaveGrupo() + " no encontrada");
+        }
+    }
+
+    @PostMapping("/share/{clave}")
+    public ResponseEntity<String> share(@PathVariable("clave") String clave, @RequestBody UnidadesDTO unidadesDTO) {
+        try {
+            // Busca el grupo por clave
+            Grupo grupo = grupoRepository.findById(clave).get();
+
+            // Itera en el arreglo de unidades
+            for (String id : unidadesDTO.getIdUnidades()) {
+
+                // Crea el nuevo grupo compartido
+                Grupo grupoCompartido = new Grupo();
+
+                // Duplica los atributos a excepción de la unidad
+                grupoCompartido.setClaveGrupo(grupo.getClaveGrupo());
+                grupoCompartido.setUea(grupo.getUea());
+                grupoCompartido.setUnidad(grupo.getUnidad());
+                grupoCompartido.setHorario(grupo.getHorario());
+                grupoCompartido.setProfesor(grupo.getProfesor());
+                grupoCompartido.setSalon(grupo.getSalon());
+                grupoCompartido.setInscritos(grupo.getInscritos());
+                grupoCompartido.setCupoUnidad(grupo.getCupoUnidad());
+
+                // Añade la unidad correspondiente al id
+                grupoCompartido.setUnidad(unidadRepository.findById(Integer.parseInt(id)).get());
+
+                // Guarda en la base de datos
+                grupoRepository.save(grupoCompartido);
+            }
+            return ResponseEntity.ok("Grupo compartida con las demás unidades");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 

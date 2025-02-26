@@ -11,5 +11,5 @@ import java.util.List;
  */
 
 @Repository
-    public interface UnidadRepository extends JpaRepository<Unidad, String> {
+    public interface UnidadRepository extends JpaRepository<Unidad, Integer> {
 }

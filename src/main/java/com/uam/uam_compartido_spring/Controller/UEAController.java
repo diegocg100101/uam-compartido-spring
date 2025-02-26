@@ -1,5 +1,6 @@
 package com.uam.uam_compartido_spring.Controller;
 
+import com.uam.uam_compartido_spring.DTO.UnidadesDTO;
 import com.uam.uam_compartido_spring.Model.Trimestre;
 import com.uam.uam_compartido_spring.Model.Tronco;
 import com.uam.uam_compartido_spring.Model.UEA;
@@ -109,6 +110,48 @@ public class UEAController {
             return ResponseEntity.ok("UEA editada");
         } else{
             return ResponseEntity.status(404).body("UEA con clave " + uea.getClave() + " no encontrada");
+        }
+    }
+
+    @GetMapping("/share/{clave}")
+    public ResponseEntity<Map<String, Object>> share(@PathVariable("clave") String clave) {
+        Map<String, Object> response = new HashMap<>();
+
+        UEA uea = ueaRepository.findById(clave).get();
+        response.put("uea", uea);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/share/{clave}")
+    public ResponseEntity<String> share(@PathVariable("clave") String clave, @RequestBody UnidadesDTO unidadesDTO) {
+        try {
+            // Busca la UEA por clave
+            UEA uea = ueaRepository.findById(clave).get();
+
+            // Itera en el arreglo de unidades
+            for (String id : unidadesDTO.getIdUnidades()) {
+
+                // Crea la nueva UEA compartida
+                UEA ueaShared = new UEA();
+
+                // Duplica los atributos a excepción de la unidad
+                ueaShared.setClave(uea.getClave());
+                ueaShared.setNombre(uea.getNombre());
+                ueaShared.setCreditos(uea.getCreditos());
+                ueaShared.setUnidad(uea.getUnidad());
+                ueaShared.setTronco(uea.getTronco());
+                ueaShared.setTrimestre(uea.getTrimestre());
+
+                // Añade la unidad correspondiente al id
+                ueaShared.setUnidad(unidadRepository.findById(Integer.parseInt(id)).get());
+
+                // Guarda en la base de datos
+                ueaRepository.save(ueaShared);
+            }
+            return ResponseEntity.ok("UEA compartida con las demás unidades");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 }
