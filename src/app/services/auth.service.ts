@@ -15,4 +15,16 @@ export class AuthService {
     }
     return false;
   }
+
+  public getRole() {
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const tokenDecoded = this.jwtHelperService.decodeToken(token);
+        return tokenDecoded.role;
+      }
+      return null;
+    }
+  }
+
 }

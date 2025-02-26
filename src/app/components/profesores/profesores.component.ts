@@ -29,10 +29,15 @@ export class ProfesoresComponent {
 
     if(textoBusqueda != '') {
       this.profesores = this.profesores.filter((profe : any) => {
-        return (profe.nombre + ' ' + profe.apellidopaterno + ' ' + profe.apellidomaterno).toLowerCase().includes(textoBusqueda) 
+        return this.quitarAcentos(profe.nombre + ' ' + profe.apellidopaterno + ' ' + profe.apellidomaterno).toLowerCase().includes(textoBusqueda) 
+        || (profe.nombre + ' ' + profe.apellidopaterno + ' ' + profe.apellidomaterno).toLowerCase().includes(textoBusqueda)
         || profe.noeconomico.toLowerCase().includes(textoBusqueda)
         || profe.unidad.nombre.toLowerCase().includes(textoBusqueda);
       }) 
     }  
+  }
+
+  quitarAcentos(texto : string) : string {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 }

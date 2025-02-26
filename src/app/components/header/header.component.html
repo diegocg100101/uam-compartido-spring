@@ -1,7 +1,13 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" routerLink="/">
+            <a *ngIf="!authenticated" class="navbar-brand" routerLink="/">
+                <img src="/img/pantera.png" width="70" height="60" class="d-inline-block align-center me-2" alt="">
+                <strong>
+                    UAM Compartido
+                </strong>
+            </a>
+            <a  *ngIf="authenticated" class="navbar-brand" routerLink="/menu">
                 <img src="/img/pantera.png" width="70" height="60" class="d-inline-block align-center me-2" alt="">
                 <strong>
                     UAM Compartido
@@ -15,9 +21,6 @@
                 <ul class="navbar-nav ms-auto">    
                     <li class="ms-2 mt-1 nav-item">
                         <a routerLink="/acercade" class="nav-link text-white">Acerca de</a>
-                    </li>
-                    <li class="ms-2 mt-1 nav-item">
-                        <img src="/img/unidades.png" alt="Logo unidades" width="150" height="30" class="d-inline-block align-center">
                     </li>
                 </ul>
             </div>

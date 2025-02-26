@@ -53,7 +53,7 @@ export class UeasComponent {
     this.ueaApi.altaUea(this.formulario.value).subscribe({
       next: (response) => {
         /* TODO */
-        console.log("Petición exitosa")
+        console.log("Petición exitosa");
         this.ngOnInit();
       },
       error: (error) => {
@@ -111,11 +111,16 @@ export class UeasComponent {
 
     if(textoBusqueda != '') {
       this.listaUea.ueas = this.listaUea.ueas.filter((uea : any) => {
-        return uea.nombre.toLowerCase().includes(textoBusqueda) 
+        return this.quitarAcentos(uea.nombre.toLowerCase()).includes(textoBusqueda) 
+        || uea.nombre.toLowerCase().includes(textoBusqueda)
         || uea.clave.toLowerCase().includes(textoBusqueda)
         || uea.unidad.nombre.toLowerCase().includes(textoBusqueda);
       }) 
     }  
+  }
+
+  quitarAcentos(texto : string) : string {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
 }
