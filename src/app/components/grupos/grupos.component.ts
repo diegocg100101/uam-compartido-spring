@@ -10,9 +10,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class GruposComponent {
 
+  ngOnInit() {
+  }
 
   eliminar(clave : any) {
-
+    
   }
 
   enviar() {

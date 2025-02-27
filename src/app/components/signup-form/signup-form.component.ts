@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { UserServiceService } from '../../services/user-service.service';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-signup-form',
@@ -17,15 +17,38 @@ export class SignupFormComponent implements OnInit {
   modal : boolean = false;
 
   formulario = new FormGroup({
-    "noeconomico": new FormControl(''),
-    "nombre": new FormControl(''),
-    "apellidopaterno": new FormControl(''),
-    "apellidomaterno": new FormControl(''),
-    "unidad": new FormControl(null),
-    "division": new FormControl(null), 
-    "departamento": new FormControl(null), 
-    "email": new FormControl(''),
-    "password": new FormControl('')
+    "noeconomico": new FormControl('', Validators.compose([
+      Validators.required
+    ])),
+    "nombre": new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.pattern("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")
+    ])),
+    "apellidopaterno": new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.pattern("^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$")
+    ])),
+    "apellidomaterno": new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.pattern("^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$")
+    ])),
+    "unidad": new FormControl(null, Validators.compose([
+      Validators.required
+    ])),
+    "division": new FormControl(null, Validators.compose([
+      Validators.required
+    ])), 
+    "departamento": new FormControl(null, Validators.compose([
+      Validators.required
+    ])),
+    "email" : new FormControl('', Validators.compose([
+          Validators.required,
+          Validators.email
+        ])),
+    "password": new FormControl('', Validators.compose([
+          Validators.required,
+          Validators.minLength(8)
+        ]))
   });
 
   constructor(private userApi: UserServiceService, private router : Router) {}
@@ -37,7 +60,6 @@ export class SignupFormComponent implements OnInit {
   }
 
   enviar() {
-    console.log("Formulario enviado:", this.formulario.value);
     this.userApi.signup(this.formulario.value).subscribe({
       next: (response) => {
         console.log('Signup successful', response);
@@ -48,5 +70,41 @@ export class SignupFormComponent implements OnInit {
         this.modal = true
       }
     });
+  }
+
+  get email() {
+    return this.formulario.get('email');
+  }
+
+  get password() {
+    return this.formulario.get('password');
+  }
+
+  get nombre() {
+    return this.formulario.get('nombre');
+  }
+
+  get noeconomico() {
+    return this.formulario.get('noeconomico');
+  }
+
+  get apellidopaterno() {
+    return this.formulario.get('apellidopaterno');
+  }
+
+  get apellidomaterno() {
+    return this.formulario.get('apellidomaterno');
+  }
+
+  get unidad() {
+    return this.formulario.get('unidad');
+  }
+
+  get division() {
+    return this.formulario.get('division');
+  }
+
+  get departamento() {
+    return this.formulario.get('departamento');
   }
 }

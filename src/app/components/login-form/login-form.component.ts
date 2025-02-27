@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, Validator, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, Validator, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserLogin } from '../../models/user-login';
 import { ApiService } from '../../services/api.service';
 
@@ -21,11 +21,15 @@ export class LoginFormComponent {
 
 
   formulario = new FormGroup({
-    "email": new FormControl(''),
-    "password": new FormControl('')
+    "email" : new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.email
+    ])),
+    "password": new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.minLength(8)
+    ]))
   })
-
-  login: UserLogin = new UserLogin();
 
   enviar() {
     this.api.postRequest('/auth/login', this.formulario.value).subscribe({
@@ -38,5 +42,13 @@ export class LoginFormComponent {
         this.modal = true
       }
     });
+  }
+  
+  get email() {
+    return this.formulario.get('email');
+  }
+
+  get password() {
+    return this.formulario.get('password');
   }
 }
