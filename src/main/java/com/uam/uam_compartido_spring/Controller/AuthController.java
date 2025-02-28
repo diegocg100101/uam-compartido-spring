@@ -1,6 +1,7 @@
 package com.uam.uam_compartido_spring.Controller;
 
 import com.uam.uam_compartido_spring.DTO.AuthRequestDTO;
+import com.uam.uam_compartido_spring.DTO.changePasswordDTO;
 import com.uam.uam_compartido_spring.Model.Departamento;
 import com.uam.uam_compartido_spring.Model.Division;
 import com.uam.uam_compartido_spring.Model.Unidad;
@@ -8,6 +9,7 @@ import com.uam.uam_compartido_spring.Model.Usuario;
 import com.uam.uam_compartido_spring.Repository.DepartamentoRepository;
 import com.uam.uam_compartido_spring.Repository.DivisionRepository;
 import com.uam.uam_compartido_spring.Repository.UnidadRepository;
+import com.uam.uam_compartido_spring.Repository.UsuarioRepository;
 import com.uam.uam_compartido_spring.Service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,8 @@ public class AuthController {
 
     @Autowired
     private DepartamentoRepository departamentoRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @GetMapping("/signup")
     public ResponseEntity<Map<String, Object>> signup() {
@@ -61,5 +65,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequestDTO authDTO) {
             return ResponseEntity.ok(authService.authenticate(authDTO));
+    }
+
+    @PostMapping("/changepassword")
+    public ResponseEntity<?> chPassword(@RequestBody changePasswordDTO changePasswordDTO) {
+        try {
+            if(authService.changePassword(changePasswordDTO.getEmail(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword()))
+                return ResponseEntity.ok("true");
+            else return ResponseEntity.ok("false");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("false");
+        }
     }
 }
