@@ -1,4 +1,12 @@
-<div class="container d-flex justify-content-center align-items-center vh-100">
+<div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+    <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error al cambiar la contraseña: </strong> Es posible que los campos no coincidan.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div *ngIf="exito" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>¡Genial!: </strong> La contraseña se cambió con éxito.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <div class="card text-bg-dark shadow-lg rounded-4">
         <div class="row g-0 align-items-center">
             <div class="col-md-4 p-4">
@@ -36,6 +44,79 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <a class="btn btn-success m-2" data-bs-toggle="modal" data-bs-target="#editar">
+        <i class="bi bi-pencil"></i> Cambiar contraseña
+    </a>
+
+</div>
+
+
+
+<div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-bg-dark">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Ingresa los campos</h1>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="clave" class="form-label">Contraseña antigua:</label>
+                                <input formControlName="oldpassword" type="password" class="form-control" id="oldpass"
+                                [ngClass]="{'is-valid' : oldpassword?.valid && oldpassword?.touched, 'is-invalid' : oldpassword?.invalid && oldpassword?.touched}"
+                                    name="clave" required placeholder="Ingresa la contraseña antigua">
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="newpassword" class="form-label">Contraseña nueva:</label>
+                                <input formControlName="newpassword" type="text" class="form-control" id="newpass"
+                                [ngClass]="{'is-valid' : newpassword?.valid && newpassword?.touched, 'is-invalid' : newpassword?.invalid && newpassword?.touched}"    
+                                name="clave" required placeholder="Ingresa la contraseña nueva">
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="newpassword" class="form-label">Confirma contraseña:</label>
+                                <input formControlName="confirmpassword" type="text" class="form-control"
+                                [ngClass]="{'is-valid' : confirmpassword?.valid && confirmpassword?.touched, 'is-invalid' : confirmpassword?.invalid && confirmpassword?.touched}"
+                                    id="newpassconfirm" name="clave" required placeholder="Ingresa la contraseña nueva">
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal" [disabled]="passwordForm.invalid">Guardar cambios</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
