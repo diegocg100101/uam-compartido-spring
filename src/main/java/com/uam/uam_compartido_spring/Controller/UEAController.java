@@ -132,11 +132,14 @@ public class UEAController {
             // Itera en el arreglo de unidades
             for (String id : unidadesDTO.getIdUnidades()) {
 
+                // Busca la unidad
+                Unidad unidad = unidadRepository.findById(Integer.parseInt(id)).get();
+
                 // Crea la nueva UEA compartida
                 UEA ueaShared = new UEA();
 
                 // Duplica los atributos a excepción de la unidad
-                ueaShared.setClave(uea.getClave());
+                ueaShared.setClave(unidad.getNombre().substring(0, 3).toUpperCase() + clave);
                 ueaShared.setNombre(uea.getNombre());
                 ueaShared.setCreditos(uea.getCreditos());
                 ueaShared.setUnidad(uea.getUnidad());
@@ -144,7 +147,7 @@ public class UEAController {
                 ueaShared.setTrimestre(uea.getTrimestre());
 
                 // Añade la unidad correspondiente al id
-                ueaShared.setUnidad(unidadRepository.findById(Integer.parseInt(id)).get());
+                ueaShared.setUnidad(unidad);
 
                 // Guarda en la base de datos
                 ueaRepository.save(ueaShared);

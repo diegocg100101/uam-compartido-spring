@@ -51,4 +51,17 @@ public class AuthService {
                 .token(jwtService.generateToken(usuario))
                 .build();
     }
+
+    public boolean changePassword(String email, String inputPassword, String newPassword) {
+        Usuario usuario = usuarioRepository.findByEmail(email).get();
+        String oldPassword = usuario.getPassword();
+
+        if(passwordEncoder.matches(inputPassword, oldPassword)) {
+            usuario.setPassword(passwordEncoder.encode(newPassword));
+            usuarioRepository.save(usuario);
+            return true;
+        }
+
+        return false;
+    }
 }

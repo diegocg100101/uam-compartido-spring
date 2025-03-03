@@ -136,11 +136,14 @@ public class GruposController {
             // Itera en el arreglo de unidades
             for (String id : unidadesDTO.getIdUnidades()) {
 
+                // Busca la unidad en la base de datos
+                Unidad unidad = unidadRepository.findById(Integer.parseInt(id)).get();
+
                 // Crea el nuevo grupo compartido
                 Grupo grupoCompartido = new Grupo();
 
                 // Duplica los atributos a excepción de la unidad
-                grupoCompartido.setClaveGrupo(grupo.getClaveGrupo());
+                grupoCompartido.setClaveGrupo(unidad.getNombre().substring(0, 3).toUpperCase() + clave.substring(3));
                 grupoCompartido.setUea(grupo.getUea());
                 grupoCompartido.setUnidad(grupo.getUnidad());
                 grupoCompartido.setHorario(grupo.getHorario());
@@ -150,7 +153,7 @@ public class GruposController {
                 grupoCompartido.setCupoUnidad(grupo.getCupoUnidad());
 
                 // Añade la unidad correspondiente al id
-                grupoCompartido.setUnidad(unidadRepository.findById(Integer.parseInt(id)).get());
+                grupoCompartido.setUnidad(unidad);
 
                 // Guarda en la base de datos
                 grupoRepository.save(grupoCompartido);
