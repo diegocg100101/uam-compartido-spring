@@ -1,14 +1,8 @@
 package com.uam.uam_compartido_spring.Controller;
 
 import com.uam.uam_compartido_spring.DTO.UnidadesDTO;
-import com.uam.uam_compartido_spring.Model.Grupo;
-import com.uam.uam_compartido_spring.Model.Salon;
-import com.uam.uam_compartido_spring.Model.UEA;
-import com.uam.uam_compartido_spring.Model.Unidad;
-import com.uam.uam_compartido_spring.Repository.GrupoRepository;
-import com.uam.uam_compartido_spring.Repository.SalonRepository;
-import com.uam.uam_compartido_spring.Repository.UeaRepository;
-import com.uam.uam_compartido_spring.Repository.UnidadRepository;
+import com.uam.uam_compartido_spring.Model.*;
+import com.uam.uam_compartido_spring.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +28,9 @@ public class GruposController {
     @Autowired
     private GrupoRepository grupoRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
 
     @GetMapping("/add")
     private ResponseEntity<Map<String, Object>> addGrupo() {
@@ -54,6 +51,9 @@ public class GruposController {
         List<String> horas = Arrays.asList("08:00 - 09:30", "09:30 - 11:00", "11:00 - 12:30", "12:30 - 14:00",
                 "14:00 - 15:30", "15:30 - 17:00", "17:00 - 19:00");
         response.put("horas", horas);
+
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        response.put("usuarios", usuarios);
 
         return ResponseEntity.ok(response);
     }
@@ -76,6 +76,16 @@ public class GruposController {
         response.put("grupos", grupos);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("delete/{clave}")
+    public ResponseEntity<String> deleteGrupo(@PathVariable("clave") String clave) {
+        try {
+            grupoRepository.deleteById(clave);
+            return ResponseEntity.ok("Grupo dado de alta correctamente");
+        }catch (Exception e){
+            return ResponseEntity.status(404).body("Error al dar de alta el grupo");
+        }
     }
 
     @GetMapping("/edit/{clave}")
