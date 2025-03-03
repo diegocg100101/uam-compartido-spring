@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { GrupoService } from '../../services/grupo.service';
 import { Router } from '@angular/router';
-import { response } from 'express';
 
 @Component({
   selector: 'app-grupos',
@@ -14,49 +13,79 @@ import { response } from 'express';
 
 export class GruposComponent {
 
-  listaGrupos : any = {};
-  listaOriginal : any = {};
-  infoGrupo : any = {};
-  list : any[]=[];
+  listaGrupos: any = {};
+  listaOriginal: any = {};
+  infoGrupo: any = {};
+  list: any[] = [];
+  horario: string[] = [];
+  jsonHorario: any;
 
-  formulario1 = new FormGroup({
-    "claveGrupo": new FormControl(''),
-    "claveUea": new FormControl(null),
+  formulario = new FormGroup({
+    "clavegrupo": new FormControl(''),
+    "uea": new FormControl(null),
     "unidad": new FormControl(null),
-    "horario": new FormControl(null),
-    "noEconomico": new FormControl(null),
-    "cupoUnidad": new FormControl(''),
+    "horariolist": new FormControl<string[]>([]),
+    "profesor": new FormControl(null),
+    "cupounidad": new FormControl(''),
     "salon": new FormControl(null)
   });
 
-  formulario1Editar = new FormGroup({
-    "claveGrupo": new FormControl(''),
-    "claveUea": new FormControl(null),
+  formularioEditar = new FormGroup({
+    "clavegrupo": new FormControl(''),
+    "uea": new FormControl(null),
     "unidad": new FormControl(null),
-    "horario": new FormControl(null),
-    "noEconomico": new FormControl(null),
-    "cupoUnidad": new FormControl(''),
+    "horariolist": new FormControl<string[]>([]),
+    "profesor": new FormControl(null),
+    "cupounidad": new FormControl(''),
     "salon": new FormControl(null)
   });
 
-  constructor(private grupoApi: GrupoService, private router: Router){}
-  
-  ngOnInit(){
+  constructor(private grupoApi: GrupoService, private router: Router) { }
+
+  ngOnInit() {
     this.grupoApi.getGrupoInformation().subscribe((data) => {
-    this.infoGrupo = data;
-    console.log(this.infoGrupo)} )
+      this.infoGrupo = data;
+      console.log(this.infoGrupo)
+
+      this.infoGrupo.usuarios = this.infoGrupo.usuarios.map((usuario: any) => ({
+        "noeconomico": usuario.noeconomico,
+        "email": usuario.email,
+        "password": usuario.password,
+        "rol": {
+          "idrol": usuario.rol.idrol,
+          "nombre": usuario.rol.nombre
+        },
+        "nombre": usuario.nombre,
+        "apellidopaterno": usuario.apellidopaterno,
+        "apellidomaterno": usuario.apellidomaterno,
+        "unidad": {
+          "idunidad": usuario.unidad.idunidad,
+          "nombre": usuario.unidad.nombre
+        },
+        "departamento": {
+          iddepartamento: usuario.departamento.iddepartamento,
+          nombre: usuario.departamento.nombre
+        },
+        "division": {
+          "iddivision": usuario.division.iddivision,
+          "nombre": usuario.division.nombre
+        }
+      }))
+    })
 
 
 
     this.grupoApi.getLisGrupos().subscribe((data) => {
       this.listaOriginal = data;
       this.listaGrupos.grupos = [...this.listaOriginal.grupos];
+
+      console.log(this.listaGrupos)
     })
   }
 
-  eliminar(clave : any) {
+  eliminar(clave: any) {
     this.grupoApi.deleteGrupo(clave).subscribe({
-      next : (response) =>{
+      next: (response) => {
         console.log("Petición Exitosa")
         this.ngOnInit();
       },
@@ -69,8 +98,8 @@ export class GruposComponent {
   }
 
   enviar() {
-    console.log(this.formulario1.value)
-    this.grupoApi.altaGrupo(this.formulario1.value).subscribe({
+    this.formulario.patchValue({ horariolist: this.horario })
+    this.grupoApi.altaGrupo(this.formulario.value).subscribe({
       next: (response) => {
         /* TODO */
         console.log("Petición exitosa");
@@ -81,12 +110,11 @@ export class GruposComponent {
         console.log("Error al hacer la petición")
       }
     })
-
   }
 
   editar() {
-    const grupo = this.formulario1Editar.value
-
+    this.formularioEditar.patchValue({ horariolist: this.horario })
+    const grupo = this.formularioEditar.value
     this.grupoApi.editGrupo(grupo).subscribe({
       next: (data) => {
         console.log("Petición exitosa");
@@ -99,20 +127,38 @@ export class GruposComponent {
 
   }
 
-  buscar(event : Event) {
+  buscar(event: Event) {
 
   }
 
-  ponerInfo(grupo : any) {
-    this.formulario1Editar.patchValue({
-      claveGrupo : grupo.clave,
-      claveUea : this.infoGrupo.uea.find((claveuea: any) => claveuea.claveuea === grupo.claveuea.clave),
-      unidad : this.infoGrupo.unidades.find((unidad : any ) => unidad.idunidad === grupo.unidad.idunidad),
-      //horario: this.infoGrupo.grupos.find((horario : any) => horario.)
-      noEconomico: this.infoGrupo.usuarios.find((noeconomico: any) => noeconomico.noeconomico === grupo.profesores.noeconomico),
-      cupoUnidad: grupo.cupoUnidad,
-      salon: this.infoGrupo.salon.find((salon : any ) => salon.idsalon === grupo.salon.idsalon)
+  ponerInfo(grupo: any) {
+    console.log(grupo)
+    this.formularioEditar.patchValue({
+      clavegrupo: grupo.clavegrupo,
+      uea: this.infoGrupo.ueas.find((claveuea: any) => claveuea.clave === grupo.uea.clave),
+      unidad: this.infoGrupo.unidades.find((unidad: any) => unidad.idunidad === grupo.unidad.idunidad),
+      profesor: this.infoGrupo.usuarios.find((noeconomico: any) => noeconomico.noeconomico === grupo.profesor.noeconomico),
+      cupounidad: grupo.cupounidad,
+      salon: this.infoGrupo.salones.find((salon: any) => salon.idsalon === grupo.salon.idsalon)
     })
+  }
+
+  actualizarHorario(event: Event) {
+    const checkbox = event.target as HTMLInputElement;
+    const valor = checkbox.value;
+
+    if (checkbox.checked) {
+      this.horario.push(valor);
+    } else {
+      this.horario = this.horario.filter(item => item !== valor);
+    }
+  }
+
+  ponerHorario(grupo : any) {
+    this.jsonHorario = JSON.parse(grupo.horario)
+  }
+
+  compartir() {
 
   }
 }

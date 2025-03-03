@@ -7,28 +7,28 @@ import { Observable } from 'rxjs';
 })
 export class GrupoService {
 
-  host ='http://localhost:8080';
+  host = 'http://localhost:8080';
 
   constructor(private httpClient: HttpClient) { }
 
-  getGrupoInformation(): Observable<any>{
-    return this.httpClient.get<any>(`${this.host}/grupos/add`, {withCredentials:true});
+  getGrupoInformation(): Observable<any> {
+    return this.httpClient.get<any>(`${this.host}/grupos/add`, { withCredentials: true });
   }
 
-  getLisGrupos(): Observable<any>{
-    return this.httpClient.get<any>(`${this.host}/grupos/list`, {withCredentials:true});
+  getLisGrupos(): Observable<any> {
+    return this.httpClient.get<any>(`${this.host}/grupos/list`, { withCredentials: true });
   }
 
-  altaGrupo(grupo : any){
-    return this.httpClient.post(`${this.host}/grupos/add`, grupo, {withCredentials:true, responseType:'text'});
+  altaGrupo(grupo: any) {
+    return this.httpClient.post(`${this.host}/grupos/add`, grupo, { withCredentials: true, responseType: 'text' });
   }
 
-  deleteGrupo(clave:String){
-    return this.httpClient.get(`${this.host}/grupos/delete${clave}`, {withCredentials:true, responseType:'text'});
+  deleteGrupo(clave: String) {
+    return this.httpClient.get(`${this.host}/grupos/delete/${clave}`, { withCredentials: true, responseType: 'text' });
   }
 
-  editGrupo(grupo: any){
-    return this.httpClient.post(`${this.host}/grupos/edit`, grupo, {withCredentials:true, responseType:'text'});
+  editGrupo(grupo: any) {
+    return this.httpClient.post(`${this.host}/grupos/edit`, grupo, { withCredentials: true, responseType: 'text' });
   }
 
 }
