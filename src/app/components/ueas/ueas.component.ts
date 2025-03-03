@@ -82,7 +82,7 @@ export class UeasComponent {
     this.ueaApi.deleteUea(clave).subscribe({
       next: (response) => {
         /* TODO */
-        console.log("Petición exitosa")
+        console.log(" Petición exitosa")
         this.ngOnInit();
       },
       error: (error) => {

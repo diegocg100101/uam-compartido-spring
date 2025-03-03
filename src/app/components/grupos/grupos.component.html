@@ -13,28 +13,30 @@
                 <table class="table table-dark table-striped text-center w-100">
                     <thead>
                         <tr>
-                            <th scope="col">Clave</th>
-                            <th scope="col">Nombre</th>
+                            <th scope="col">ClaveGrupo</th>
+                            <th scope="col">ClaveUea</th>
                             <th scope="col">Unidad</th>
-                            <th scope="col">Tronco</th>
-                            <th scope="col">Trimestre</th>
-                            <th scope="col">Créditos</th>
+                            <th scope="col">Salon</th>
+                            <th scope="col">NoEconomico</th>
+                            <th scope="col">Cupo</th>
+                            <th scope = "col">Horario</th>
                             <th scope="col">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                        <tr *ngFor="let grupo of listaGrupos.grupos">
+                            <td>{{grupo.clave}}</td>
+                            <td>{{grupo.ClaveUea}}</td>
+                            <td>{{grupo.unidad.nombre}}</td>
+                            <td>{{grupo.salon.nombre}}</td>
+                            <td>{{grupo.noeconomico.nombre}}</td>
+                            <td>{{grupo.cupo}}</td>
+                            <td>{{grupo.horario}}</td>
                             <td>
-                                <a class="btn btn-success m-2 col-7" data-bs-toggle="modal" data-bs-target="#editar"><i
-                                        class="bi bi-pencil"></i></a>
-                                <a class="btn btn-danger m-2 col-7"><i class="bi bi-trash"></i></a>
-                                <a class="btn btn-primary m-2 col-7" data-bs-toggle="modal"
+                                <a class="btn btn-success m-2 col-8" data-bs-toggle="modal" data-bs-target="#editar" (click)="ponerInfo(grupo)">
+                                    <i class="bi bi-pencil"></i></a>
+                                <a class="btn btn-danger m-2 col-8"><i class="bi bi-trash"></i></a>
+                                <a class="btn btn-primary m-2 col-8" data-bs-toggle="modal"
                                     data-bs-target="#compartir">Compartir</a>
                             </td>
                         </tr>
@@ -54,29 +56,29 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form (ngSubmit)="editar()" method="post">
+                <form [formGroup]="formulario1Editar" (ngSubmit)="editar()" method="post">
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="clave" class="form-label">Clave</label>
-                                <input formControlName="clave" type="text" class="form-control" id="clave" name="clave"
+                                <label for="clave" class="form-label">ClaveGrupo</label>
+                                <input formControlName="claveGrupo" type="text" class="form-control" id="clave" name="clave"
                                     required placeholder="Ingresa la clave" readonly>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input formControlName="nombre" type="text" class="form-control" id="nombre"
+                                <label for="nombre" class="form-label">ClaveUea</label>
+                                <input formControlName="claveUea" type="text" class="form-control" id="nombre"
                                     name="nombre" required placeholder="Ingresa el nombre">
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="creditos" class="form-label">Créditos</label>
-                                <input formControlName="creditos" min="0" type="number" class="form-control"
-                                    id="creditos" name="creditos" required
-                                    placeholder="Ingresa la cantidad de créditos">
+                                <label for="cupo" class="form-label">Cupo</label>
+                                <input formControlName="cupoUnidad" min="0" type="number" class="form-control"
+                                    id="cupo" name="cupo" required
+                                    placeholder="Ingresa el margen del grupo">
                             </div>
                         </div>
                     </div>
@@ -87,25 +89,29 @@
                                 <label for="unidad" class="form-label">Unidad</label>
                                 <select id="unidad" class="form-select" formControlName="unidad" required>
                                     <option value="" disabled>Selecciona una unidad</option>
+                                    <option *ngFor="let unidad of infoGrupo.unidades" [ngValue]="unidad">
+                                        {{ unidad.nombre }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="tronco" class="form-label">Tronco</label>
-                                <select class="form-select" id="tronco" name="tronco" formControlName="tronco" required>
-                                    <option value="" disabled>Selecciona un tronco</option>
+                                <label for="profesor" class="form-label">Profesor</label>
+                                <select class="form-select" id="profesor" name="profesor" formControlName="noEconomico" required>
+                                    <option value="" disabled>Selecciona al profesor</option>
+        
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="trimestre" class="form-label">Trimestre</label>
-                                <select class="form-select" id="trimestre" name="trimestre" formControlName="trimestre"
+                                <label for="salon" class="form-label">Salon</label>
+                                <select class="form-select" id="salon" name="salon" formControlName="salon"
                                     required>
-                                    <option value=0>Selecciona un trimestre</option>
+                                    <option value=0>Selecciona el salon </option>
                                 </select>
                             </div>
                         </div>
@@ -129,29 +135,33 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form (ngSubmit)="enviar()" method="post">
+                <form [formGroup]="formulario1" (ngSubmit)="enviar()" method="post">
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="clave" class="form-label">Clave</label>
-                                <input formControlName="clave" type="text" class="form-control" id="clave" name="clave"
+                                <label for="clave" class="form-label">ClaveGrupo</label>
+                                <input formControlName="claveGrupo" type="text" class="form-control" id="clave" name="clave"
                                     required placeholder="Ingresa la clave">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input formControlName="nombre" type="text" class="form-control" id="nombre"
-                                    name="nombre" required placeholder="Ingresa el nombre">
+                                <label for="claveuea" class="form-label">ClaveUEA</label>
+                                <select id="claveuea" class="form-select" formControlName="claveUea" required>
+                                    <option value="" disabled>Selecciona la clave de uea</option>
+                                    <option *ngFor="let uea of infoGrupo.ueas" [ngValue]="uea">
+                                        {{ uea.nombre }}
+                                    </option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="creditos" class="form-label">Créditos</label>
-                                <input formControlName="creditos" min="0" type="number" class="form-control"
-                                    id="creditos" name="creditos" required
-                                    placeholder="Ingresa la cantidad de créditos">
+                                <label for="cupo" class="form-label">Cupo</label>
+                                <input formControlName="cupoUnidad" min="0" type="number" class="form-control"
+                                    id="cupo" name="cupo" required
+                                    placeholder="Ingresa el margen del grupo">
                             </div>
                         </div>
                     </div>
@@ -162,26 +172,30 @@
                                 <label for="unidad" class="form-label">Unidad</label>
                                 <select id="unidad" class="form-select" formControlName="unidad" required>
                                     <option value="" disabled>Selecciona una unidad</option>
+                                    <option *ngFor="let unidad of infoGrupo.unidades" [ngValue]="unidad">
+                                        {{ unidad.nombre }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="tronco" class="form-label">Tronco</label>
-                                <select class="form-select" id="tronco" name="tronco" formControlName="tronco" required>
-                                    <option value="" disabled>Selecciona un tronco</option>
+                                <label for="profesor" class="form-label">Profesor</label>
+                                <select class="form-select" id="profesor" name="profesor" formControlName="noEconomico" required>
+                                    <option value="" disabled>Selecciona el profesor</option>
+                                    <option *ngFor="let usuario of infoGrupo.usuarios" [ngValue]="usuario">
+                                        {{ usuario.nombre }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="trimestre" class="form-label">Trimestre</label>
-                                <select class="form-select" id="trimestre" name="trimestre" formControlName="trimestre"
-                                    required>
-                                    <option value=0>Selecciona un trimestre</option>
-                                </select>
+                                <label for="salon" class="form-label">Salon</label>
+                                <input formControlName="salon" type="text" class="form-control" id="salon" name="salon"
+                                    required placeholder="Ingrese el salon">
                             </div>
                         </div>
                     </div>
