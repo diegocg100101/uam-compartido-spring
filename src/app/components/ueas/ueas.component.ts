@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, FormsModule} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators} from '@angular/forms';
 import { UeaService } from '../../services/uea.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -18,21 +18,51 @@ export class UeasComponent {
   list : any[] = []
 
   formulario = new FormGroup({
-    "clave" : new FormControl(''),
-    "nombre" : new FormControl(''),
-    "unidad" : new FormControl(null),
-    "tronco" : new FormControl(null),
-    "trimestre" : new FormControl(null),
-    "creditos" : new FormControl('')
+    "clave" : new FormControl('', Validators.compose([
+      Validators.required
+    ])),
+    "nombre" : new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.pattern("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")
+    ])),
+    "unidad" : new FormControl(null, Validators.compose([
+      Validators.required
+    ])),
+    "tronco" : new FormControl(null, Validators.compose([
+      Validators.required
+    ])),
+    "trimestre" : new FormControl(null, Validators.compose([
+      Validators.required
+    ])),
+    "creditos" : new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.max(100),
+      Validators.min(1)
+    ]))
   });
 
   formularioEditar = new FormGroup({
-    "clave" : new FormControl(''),
-    "nombre" : new FormControl(''),
-    "unidad" : new FormControl(null),
-    "tronco" : new FormControl(null),
-    "trimestre" : new FormControl(null),
-    "creditos" : new FormControl('')
+    "clave" : new FormControl('', Validators.compose([
+      Validators.required
+    ])),
+    "nombre" : new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.pattern("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")
+    ])),
+    "unidad" : new FormControl(null, Validators.compose([
+      Validators.required
+    ])),
+    "tronco" : new FormControl(null, Validators.compose([
+      Validators.required
+    ])),
+    "trimestre" : new FormControl(null, Validators.compose([
+      Validators.required
+    ])),
+    "creditos" : new FormControl('', Validators.compose([
+      Validators.required,
+      Validators.max(100),
+      Validators.min(1)
+    ]))
   });
 
   constructor(private ueaApi : UeaService, private router : Router) {}
@@ -121,6 +151,30 @@ export class UeasComponent {
 
   quitarAcentos(texto : string) : string {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  get clave() {
+    return this.formulario.get('clave');
+  }
+
+  get claveEditar() {
+    return this.formularioEditar.get('clave');
+  }
+
+  get nombre() {
+    return this.formulario.get('nombre');
+  }
+
+  get nombreEditar() {
+    return this.formularioEditar.get('nombre');
+  }
+
+  get creditos() {
+    return this.formulario.get('creditos');
+  }
+
+  get creditosEditar() {
+    return this.formularioEditar.get('creditos');
   }
 
 }

@@ -11,6 +11,10 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 import { AuthGuardService as AuthGuard } from './services/auth-guard.service';
 import { ProfesoresComponent } from './components/profesores/profesores.component';
 
+/*
+ /signup
+*/
+
 export const routes: Routes = [
     {
         path: '', 
@@ -18,6 +22,7 @@ export const routes: Routes = [
         children: [
             { path: '', component: LoginFormComponent },
             { path: 'signup', component: SignupFormComponent }
+            
         ]
     },
     {

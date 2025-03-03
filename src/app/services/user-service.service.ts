@@ -30,4 +30,8 @@ export class UserServiceService {
   getAllUsers() : Observable <any> {
     return this.httpClient.get<any>(`${this.host}/user/all`, { withCredentials: true });
   }
+
+  changePass(dto : any) {
+    return this.httpClient.post(`${this.host}/auth/changepassword`, dto, { withCredentials: true, responseType: 'text'});
+  }
 }

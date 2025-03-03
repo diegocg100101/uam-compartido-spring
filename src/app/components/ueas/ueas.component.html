@@ -8,7 +8,7 @@
 
             <input class="form-control mr-sm-2 mb-2" type="search" name="busqueda"
                 placeholder="Búsqueda por unidad, nombre o clave" aria-label="Search" (change)="buscar($event)">
-            
+
             <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
                 <table class="table table-dark table-striped text-center w-100">
                     <thead>
@@ -31,8 +31,8 @@
                             <td>{{ uea.trimestre.nombre }}</td>
                             <td>{{ uea.creditos }}</td>
                             <td>
-                                <a class="btn btn-success m-2 col-7" data-bs-toggle="modal"
-                                    data-bs-target="#editar" (click)="ponerInfo(uea)">
+                                <a class="btn btn-success m-2 col-7" data-bs-toggle="modal" data-bs-target="#editar"
+                                    (click)="ponerInfo(uea)">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <a class="btn btn-danger m-2 col-7" (click)="eliminar(uea.clave)">
@@ -43,7 +43,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
 </div>
@@ -54,7 +53,8 @@
         <div class="modal-content text-bg-dark">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Edita los datos de la UEA</h1>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form [formGroup]="formularioEditar" (ngSubmit)="editar()" method="post">
@@ -63,14 +63,24 @@
                             <div class="mb-3">
                                 <label for="clave" class="form-label">Clave</label>
                                 <input formControlName="clave" type="text" class="form-control" id="clave"
+                                    [ngClass]="{'is-valid': claveEditar?.valid && claveEditar?.touched, 'is-invalid': claveEditar?.invalid && claveEditar?.touched}"
                                     name="clave" required placeholder="Ingresa la clave" readonly>
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
                                 <input formControlName="nombre" type="text" class="form-control" id="nombre"
+                                    [ngClass]="{'is-valid': nombreEditar?.valid && nombreEditar?.touched, 'is-invalid': nombreEditar?.invalid && nombreEditar?.touched}"
                                     name="nombre" required placeholder="Ingresa el nombre">
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
                             </div>
                         </div>
 
@@ -78,8 +88,13 @@
                             <div class="mb-3">
                                 <label for="creditos" class="form-label">Créditos</label>
                                 <input formControlName="creditos" min="0" type="number" class="form-control"
+                                    [ngClass]="{'is-valid': creditosEditar?.valid && creditosEditar?.touched, 'is-invalid': creditosEditar?.invalid && creditosEditar?.touched}"
                                     id="creditos" name="creditos" required
                                     placeholder="Ingresa la cantidad de créditos">
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -100,8 +115,7 @@
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label for="tronco" class="form-label">Tronco</label>
-                                <select class="form-select" id="tronco" name="tronco" formControlName="tronco"
-                                    required>
+                                <select class="form-select" id="tronco" name="tronco" formControlName="tronco" required>
                                     <option value="" disabled>Selecciona un tronco</option>
                                     <option *ngFor="let tronco of infoUea.troncos" [ngValue]="tronco">
                                         {{ tronco.nombre }}
@@ -113,8 +127,8 @@
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label for="trimestre" class="form-label">Trimestre</label>
-                                <select class="form-select" id="trimestre" name="trimestre"
-                                    formControlName="trimestre" required>
+                                <select class="form-select" id="trimestre" name="trimestre" formControlName="trimestre"
+                                    required>
                                     <option value=0>Selecciona un trimestre</option>
                                     <option *ngFor="let trimestre of infoUea.trimestres" [ngValue]="trimestre">
                                         {{ trimestre.nombre }}
@@ -125,7 +139,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Guardar cambios</button>
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal" [disabled]="formularioEditar.invalid">Guardar cambios</button>
                     </div>
                 </form>
             </div>
@@ -138,7 +152,8 @@
         <div class="modal-content text-bg-dark">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Ingresa los datos de la UEA</h1>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form [formGroup]="formulario" (ngSubmit)="enviar()" method="post">
@@ -146,15 +161,25 @@
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label for="clave" class="form-label">Clave</label>
-                                <input formControlName="clave" type="text" class="form-control" id="clave"
+                                <input formControlName="clave" type="number" class="form-control" id="clave"
+                                    [ngClass]="{'is-valid': clave?.valid && clave?.touched, 'is-invalid': clave?.invalid && clave?.touched}"
                                     name="clave" required placeholder="Ingresa la clave">
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
                                 <input formControlName="nombre" type="text" class="form-control" id="nombre"
+                                    [ngClass]="{'is-valid': nombre?.valid && nombre?.touched, 'is-invalid': nombre?.invalid && nombre?.touched}"
                                     name="nombre" required placeholder="Ingresa el nombre">
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
                             </div>
                         </div>
 
@@ -162,8 +187,13 @@
                             <div class="mb-3">
                                 <label for="creditos" class="form-label">Créditos</label>
                                 <input formControlName="creditos" min="0" type="number" class="form-control"
+                                    [ngClass]="{'is-valid': creditos?.valid && creditos?.touched, 'is-invalid': creditos?.invalid && creditos?.touched}"
                                     id="creditos" name="creditos" required
                                     placeholder="Ingresa la cantidad de créditos">
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -178,38 +208,50 @@
                                         {{ unidad.nombre }}
                                     </option>
                                 </select>
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label for="tronco" class="form-label">Tronco</label>
-                                <select class="form-select" id="tronco" name="tronco" formControlName="tronco"
-                                    required>
+                                <select class="form-select" id="tronco" name="tronco" formControlName="tronco" required>
                                     <option value="" disabled>Selecciona un tronco</option>
                                     <option *ngFor="let tronco of infoUea.troncos" [ngValue]="tronco">
                                         {{ tronco.nombre }}
                                     </option>
                                 </select>
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-lg-4">
                             <div class="mb-3">
                                 <label for="trimestre" class="form-label">Trimestre</label>
-                                <select class="form-select" id="trimestre" name="trimestre"
-                                    formControlName="trimestre" required>
+                                <select class="form-select" id="trimestre" name="trimestre" formControlName="trimestre"
+                                    required>
                                     <option value=0>Selecciona un trimestre</option>
                                     <option *ngFor="let trimestre of infoUea.trimestres" [ngValue]="trimestre">
                                         {{ trimestre.nombre }}
                                     </option>
                                 </select>
+                                <div class="valid-feedback">
+                                </div>
+                                <div class="invalid-feedback">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Guardar cambios</button>
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal"
+                            [disabled]="formulario.invalid">Guardar cambios</button>
                     </div>
                 </form>
             </div>
