@@ -61,6 +61,7 @@ public class GruposController {
     @PostMapping("/add")
     private ResponseEntity<String> addGrupo(@RequestBody Grupo grupo) {
         try {
+            grupo.convertirHorarioAJson();
             grupoRepository.save(grupo);
             return ResponseEntity.ok("Grupo dado de alta correctamente");
         } catch (Exception e) {
