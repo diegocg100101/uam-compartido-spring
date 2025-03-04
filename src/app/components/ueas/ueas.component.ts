@@ -67,6 +67,10 @@ export class UeasComponent {
 
   constructor(private ueaApi : UeaService, private router : Router) {}
 
+  limpiar() {
+    this.formulario.reset()
+  }
+
   ngOnInit() {
     this.ueaApi.getUeaInformation().subscribe((data) => {
       this.infoUea = data;

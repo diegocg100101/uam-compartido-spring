@@ -31,4 +31,9 @@ export class GrupoService {
     return this.httpClient.post(`${this.host}/grupos/edit`, grupo, { withCredentials: true, responseType: 'text' });
   }
 
+  shareGrupo(clave : string, idunidades : any) {
+    console.log(idunidades)
+    return this.httpClient.post(`${this.host}/grupos/share/${clave}`, idunidades, { withCredentials: true, responseType: 'text' })
+  }
+
 }

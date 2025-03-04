@@ -32,13 +32,14 @@
                                 grupo.profesor.apellidopaterno + ' ' + grupo.profesor.apellidomaterno }}</td>
                             <td>{{ grupo.cupounidad }}</td>
                             <td>
-                                <a class="btn btn-success m-2 col-8" data-bs-toggle="modal" data-bs-target="#editar"
+                                <a class="btn btn-success m-2" data-bs-toggle="modal" data-bs-target="#editar"
                                     (click)="ponerInfo(grupo)">
                                     <i class="bi bi-pencil"></i></a>
-                                <a class="btn btn-danger m-2 col-8" (click)="eliminar(grupo.clavegrupo)"><i class="bi bi-trash"></i></a>
-                                <a class="btn btn-primary m-2 col-8" data-bs-toggle="modal"
-                                    data-bs-target="#compartir">Compartir</a>
-                                <a class="btn btn-secondary m-2 col-8" data-bs-toggle="modal"
+                                <a class="btn btn-danger m-2" (click)="eliminar(grupo.clavegrupo)"><i class="bi bi-trash"></i></a>
+
+                                <a class="btn btn-primary m-2" data-bs-toggle="modal"
+                                    data-bs-target="#compartir" (click)="guardarGrupo(grupo)">Compartir</a>
+                                <a class="btn btn-secondary m-2" data-bs-toggle="modal"
                                     data-bs-target="#horario" (click)="ponerHorario(grupo)">Horario</a>
                             </td>
                         </tr>
@@ -264,6 +265,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" (click)="limpiar()">Limpiar</button>
                         <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Guardar cambios</button>
                     </div>
                 </form>
@@ -281,31 +283,34 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form (ngSubmit)="enviar()" method="post">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="ler">
+                <form method="post">
+                    <div class="form-check" *ngIf="grupoCompartir.unidad.idunidad !== 1">
+                        <input class="form-check-input" type="checkbox" id="ler" [value]="1" (change)="seleccionar($event)" >
                         <label for="ler">Lerma</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="azc">
+
+                    <div class="form-check" *ngIf="grupoCompartir.unidad.idunidad !== 2">
+                        <input class="form-check-input" type="checkbox" id="cua" [value]="2" (change)="seleccionar($event)" >
+                        <label for="cua">Cuajimalpa</label>
+                    </div>
+
+                    <div class="form-check" *ngIf="grupoCompartir.unidad.idunidad !== 3">
+                        <input class="form-check-input" type="checkbox" id="azc" [value]="3" (change)="seleccionar($event)" >
                         <label for="azc">Azcapotzalco</label>
                     </div>
 
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="cua">
-                        <label for="cua">Cuajimalpa</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="cua">
-                        <label for="cua">Iztapalapa</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="xoch">
+                    <div class="form-check" *ngIf="grupoCompartir.unidad.idunidad !== 4">
+                        <input class="form-check-input" type="checkbox" id="xoch" [value]="4" (change)="seleccionar($event)">
                         <label for="xoch">Xochimilco</label>
+                    </div>
+
+                    <div class="form-check" *ngIf="grupoCompartir.unidad.idunidad !== 5">
+                        <input class="form-check-input" type="checkbox" id="cua" [value]="5" (change)="seleccionar($event)" >
+                        <label for="cua">Iztapalapa</label>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Compartir</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="compartir()">Compartir</button>
                     </div>
                 </form>
             </div>

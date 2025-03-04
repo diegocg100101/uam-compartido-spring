@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { GrupoService } from '../../services/grupo.service';
 import { Router } from '@angular/router';
+import { GrupoModel } from '../../models/grupo-model';
 
 @Component({
   selector: 'app-grupos',
@@ -19,6 +20,8 @@ export class GruposComponent {
   list: any[] = [];
   horario: string[] = [];
   jsonHorario: any;
+  idunidades : string[] = [];
+  grupoCompartir : any;
 
   formulario = new FormGroup({
     "clavegrupo": new FormControl(''),
@@ -40,12 +43,33 @@ export class GruposComponent {
     "salon": new FormControl(null)
   });
 
-  constructor(private grupoApi: GrupoService, private router: Router) { }
+  constructor(private grupoApi: GrupoService, private router: Router) { 
+    this.formulario.get('unidad')?.valueChanges.subscribe(valor => {
+      this.actualizarClaveUnidad(valor)
+    })
+
+    this.formulario.get('uea')?.valueChanges.subscribe(valor => {
+      this.actualizarClaveUea(valor)
+    })
+  }
+
+  actualizarClaveUnidad(unidad : any) {
+    this.formulario.patchValue({ clavegrupo : unidad.nombre.substring(0, 3).toUpperCase()})
+  }
+
+  actualizarClaveUea(uea : any) {
+    const valor = this.formulario.get('clavegrupo')?.value
+    this.formulario.get('clavegrupo')?.setValue(valor + uea.clave.substring(3) + this.quitarAcentos(uea.nombre.substring(0, 3).toUpperCase()) + Math.floor(Math.random() * 100))
+  }
+
+  limpiar() {
+    this.formulario.reset()
+  }
 
   ngOnInit() {
+
     this.grupoApi.getGrupoInformation().subscribe((data) => {
-      this.infoGrupo = data;
-      console.log(this.infoGrupo)
+      this.infoGrupo = data
 
       this.infoGrupo.usuarios = this.infoGrupo.usuarios.map((usuario: any) => ({
         "noeconomico": usuario.noeconomico,
@@ -78,8 +102,7 @@ export class GruposComponent {
     this.grupoApi.getLisGrupos().subscribe((data) => {
       this.listaOriginal = data;
       this.listaGrupos.grupos = [...this.listaOriginal.grupos];
-
-      console.log(this.listaGrupos)
+      this.grupoCompartir = data.grupos[0]
     })
   }
 
@@ -128,7 +151,23 @@ export class GruposComponent {
   }
 
   buscar(event: Event) {
+    this.listaGrupos.grupos = [...this.listaOriginal.grupos]
 
+    const elemento = event.target as HTMLInputElement;
+    const textoBusqueda = elemento.value.toLowerCase();
+
+    if(textoBusqueda != '') {
+      this.listaGrupos.grupos = this.listaGrupos.grupos.filter((grupo : any) => {
+        return grupo.clavegrupo.toLowerCase().includes(textoBusqueda)
+        || grupo.unidad.nombre.toLowerCase().includes(textoBusqueda)
+        || (grupo.profesor.nombre + ' ' + grupo.profesor.apellidopaterno + ' ' + grupo.profesor.apellidomaterno).toLowerCase().includes(textoBusqueda)
+        || this.quitarAcentos(grupo.profesor.nombre + ' ' + grupo.profesor.apellidopaterno + ' ' + grupo.profesor.apellidomaterno).toLowerCase().includes(textoBusqueda) ;
+      }) 
+    }  
+  }
+
+  quitarAcentos(texto : string) : string {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
   ponerInfo(grupo: any) {
@@ -158,7 +197,30 @@ export class GruposComponent {
     this.jsonHorario = JSON.parse(grupo.horario)
   }
 
-  compartir() {
+  seleccionar(event : Event) {
+    const checkbox = event.target as HTMLInputElement;
+    const valor = checkbox.value;
 
+    if(checkbox.checked) {
+      this.idunidades.push(valor)
+    } else {
+      this.idunidades = this.idunidades.filter(item => item !== valor)
+    }
+  }
+
+  guardarGrupo(grupo : any) {
+    this.grupoCompartir = grupo
+  }
+
+  compartir() {
+    this.grupoApi.shareGrupo(this.grupoCompartir.clavegrupo, { idunidades : this.idunidades}).subscribe({
+      next: (data) => {
+        console.log(data)
+        this.ngOnInit()
+      }, 
+      error: (error) => {
+        console.log(error)
+      } 
+    })
   }
 }
