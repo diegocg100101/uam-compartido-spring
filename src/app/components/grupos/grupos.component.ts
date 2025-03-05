@@ -20,8 +20,9 @@ export class GruposComponent {
   list: any[] = [];
   horario: string[] = [];
   jsonHorario: any;
-  idunidades : string[] = [];
-  grupoCompartir : any;
+  idunidades: string[] = [];
+  grupoCompartir: any = { unidad: { idunidad: null, nombre: '' } };
+  edicion: any;
 
   formulario = new FormGroup({
     "clavegrupo": new FormControl(''),
@@ -43,7 +44,7 @@ export class GruposComponent {
     "salon": new FormControl(null)
   });
 
-  constructor(private grupoApi: GrupoService, private router: Router) { 
+  constructor(private grupoApi: GrupoService, private router: Router) {
     this.formulario.get('unidad')?.valueChanges.subscribe(valor => {
       this.actualizarClaveUnidad(valor)
     })
@@ -53,13 +54,13 @@ export class GruposComponent {
     })
   }
 
-  actualizarClaveUnidad(unidad : any) {
-    this.formulario.patchValue({ clavegrupo : unidad.nombre.substring(0, 3).toUpperCase()})
+  actualizarClaveUnidad(unidad: any) {
+    this.formulario.patchValue({ clavegrupo: unidad.nombre.substring(0, 3).toUpperCase() })
   }
 
-  actualizarClaveUea(uea : any) {
+  actualizarClaveUea(uea: any) {
     const valor = this.formulario.get('clavegrupo')?.value
-    this.formulario.get('clavegrupo')?.setValue(valor + uea.clave.substring(3) + this.quitarAcentos(uea.nombre.substring(0, 3).toUpperCase()) + Math.floor(Math.random() * 100))
+    this.formulario.get('clavegrupo')?.setValue(valor + uea.clave.substring(4) + this.quitarAcentos(uea.nombre.substring(0, 3).toUpperCase()) + Math.floor(Math.random() * 100))
   }
 
   limpiar() {
@@ -102,7 +103,6 @@ export class GruposComponent {
     this.grupoApi.getLisGrupos().subscribe((data) => {
       this.listaOriginal = data;
       this.listaGrupos.grupos = [...this.listaOriginal.grupos];
-      this.grupoCompartir = data.grupos[0]
     })
   }
 
@@ -156,17 +156,17 @@ export class GruposComponent {
     const elemento = event.target as HTMLInputElement;
     const textoBusqueda = elemento.value.toLowerCase();
 
-    if(textoBusqueda != '') {
-      this.listaGrupos.grupos = this.listaGrupos.grupos.filter((grupo : any) => {
+    if (textoBusqueda != '') {
+      this.listaGrupos.grupos = this.listaGrupos.grupos.filter((grupo: any) => {
         return grupo.clavegrupo.toLowerCase().includes(textoBusqueda)
-        || grupo.unidad.nombre.toLowerCase().includes(textoBusqueda)
-        || (grupo.profesor.nombre + ' ' + grupo.profesor.apellidopaterno + ' ' + grupo.profesor.apellidomaterno).toLowerCase().includes(textoBusqueda)
-        || this.quitarAcentos(grupo.profesor.nombre + ' ' + grupo.profesor.apellidopaterno + ' ' + grupo.profesor.apellidomaterno).toLowerCase().includes(textoBusqueda) ;
-      }) 
-    }  
+          || grupo.unidad.nombre.toLowerCase().includes(textoBusqueda)
+          || (grupo.profesor.nombre + ' ' + grupo.profesor.apellidopaterno + ' ' + grupo.profesor.apellidomaterno).toLowerCase().includes(textoBusqueda)
+          || this.quitarAcentos(grupo.profesor.nombre + ' ' + grupo.profesor.apellidopaterno + ' ' + grupo.profesor.apellidomaterno).toLowerCase().includes(textoBusqueda);
+      })
+    }
   }
 
-  quitarAcentos(texto : string) : string {
+  quitarAcentos(texto: string): string {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
@@ -193,34 +193,63 @@ export class GruposComponent {
     }
   }
 
-  ponerHorario(grupo : any) {
+  ponerHorario(grupo: any) {
     this.jsonHorario = JSON.parse(grupo.horario)
   }
 
-  seleccionar(event : Event) {
+  seleccionar(event: Event) {
     const checkbox = event.target as HTMLInputElement;
     const valor = checkbox.value;
 
-    if(checkbox.checked) {
+    if (checkbox.checked) {
       this.idunidades.push(valor)
     } else {
       this.idunidades = this.idunidades.filter(item => item !== valor)
     }
   }
 
-  guardarGrupo(grupo : any) {
+  guardarGrupo(grupo: any) {
     this.grupoCompartir = grupo
   }
 
   compartir() {
-    this.grupoApi.shareGrupo(this.grupoCompartir.clavegrupo, { idunidades : this.idunidades}).subscribe({
+    this.grupoApi.shareGrupo(this.grupoCompartir.clavegrupo, { idunidades: this.idunidades }).subscribe({
       next: (data) => {
         console.log(data)
         this.ngOnInit()
-      }, 
+      },
       error: (error) => {
         console.log(error)
-      } 
+      }
     })
+  }
+
+  activarEdicion(grupo: any) {
+    this.edicion = grupo.clavegrupo
+  }
+
+  actualizarInscritos(grupo: any, event: Event) {
+    const input = event.target as HTMLInputElement;
+    const valor = parseInt(input.value);
+
+    if (valor >= 0) {
+      grupo.inscritos = valor
+      grupo.profesor = this.infoGrupo.usuarios.find((noeconomico: any) => noeconomico.noeconomico === grupo.profesor.noeconomico)
+      console.log(grupo)
+      this.grupoApi.editGrupo(grupo).subscribe({
+        next: (data) => {
+          console.log("Petición exitosa");
+          this.edicion = ''
+          this.ngOnInit();
+        },
+        error: (err) => {
+          console.log("Error al hacer la petición");
+        },
+      })
+    }
+  }
+
+  convertirUsuarios(grupo: any) {
+
   }
 }

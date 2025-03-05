@@ -19,6 +19,7 @@
                             <th scope="col">Salón</th>
                             <th scope="col">Profesor</th>
                             <th scope="col">Cupo</th>
+                            <th scope="col">Inscritos</th>
                             <th scope="col">Acción</th>
                         </tr>
                     </thead>
@@ -32,15 +33,25 @@
                                 grupo.profesor.apellidopaterno + ' ' + grupo.profesor.apellidomaterno }}</td>
                             <td>{{ grupo.cupounidad }}</td>
                             <td>
+                                <div *ngIf="edicion !== grupo.clavegrupo" style="cursor: pointer;"
+                                    (click)="activarEdicion(grupo)">
+                                    {{ grupo.inscritos }}
+                                </div>
+                                <div *ngIf="edicion === grupo.clavegrupo">
+                                    <input type="number" class="form-control form-control-sm" style="width: 80px;"
+                                        (change)="actualizarInscritos(grupo, $event)" min="0">
+                                </div>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#compartir"
+                                    (click)="guardarGrupo(grupo)">Compartir</a>
+                                <a class="btn btn-secondary m-2" data-bs-toggle="modal" data-bs-target="#horario"
+                                    (click)="ponerHorario(grupo)">Horario</a>
                                 <a class="btn btn-success m-2" data-bs-toggle="modal" data-bs-target="#editar"
                                     (click)="ponerInfo(grupo)">
                                     <i class="bi bi-pencil"></i></a>
-                                <a class="btn btn-danger m-2" (click)="eliminar(grupo.clavegrupo)"><i class="bi bi-trash"></i></a>
-
-                                <a class="btn btn-primary m-2" data-bs-toggle="modal"
-                                    data-bs-target="#compartir" (click)="guardarGrupo(grupo)">Compartir</a>
-                                <a class="btn btn-secondary m-2" data-bs-toggle="modal"
-                                    data-bs-target="#horario" (click)="ponerHorario(grupo)">Horario</a>
+                                <a class="btn btn-danger m-2" (click)="eliminar(grupo.clavegrupo)"><i
+                                        class="bi bi-trash"></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -285,32 +296,38 @@
             <div class="modal-body">
                 <form method="post">
                     <div class="form-check" *ngIf="grupoCompartir.unidad.idunidad !== 1">
-                        <input class="form-check-input" type="checkbox" id="ler" [value]="1" (change)="seleccionar($event)" >
+                        <input class="form-check-input" type="checkbox" id="ler" [value]="1"
+                            (change)="seleccionar($event)">
                         <label for="ler">Lerma</label>
                     </div>
 
                     <div class="form-check" *ngIf="grupoCompartir.unidad.idunidad !== 2">
-                        <input class="form-check-input" type="checkbox" id="cua" [value]="2" (change)="seleccionar($event)" >
+                        <input class="form-check-input" type="checkbox" id="cua" [value]="2"
+                            (change)="seleccionar($event)">
                         <label for="cua">Cuajimalpa</label>
                     </div>
 
                     <div class="form-check" *ngIf="grupoCompartir.unidad.idunidad !== 3">
-                        <input class="form-check-input" type="checkbox" id="azc" [value]="3" (change)="seleccionar($event)" >
+                        <input class="form-check-input" type="checkbox" id="azc" [value]="3"
+                            (change)="seleccionar($event)">
                         <label for="azc">Azcapotzalco</label>
                     </div>
 
                     <div class="form-check" *ngIf="grupoCompartir.unidad.idunidad !== 4">
-                        <input class="form-check-input" type="checkbox" id="xoch" [value]="4" (change)="seleccionar($event)">
+                        <input class="form-check-input" type="checkbox" id="xoch" [value]="4"
+                            (change)="seleccionar($event)">
                         <label for="xoch">Xochimilco</label>
                     </div>
 
                     <div class="form-check" *ngIf="grupoCompartir.unidad.idunidad !== 5">
-                        <input class="form-check-input" type="checkbox" id="cua" [value]="5" (change)="seleccionar($event)" >
+                        <input class="form-check-input" type="checkbox" id="cua" [value]="5"
+                            (change)="seleccionar($event)">
                         <label for="cua">Iztapalapa</label>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="compartir()">Compartir</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                            (click)="compartir()">Compartir</button>
                     </div>
                 </form>
             </div>
@@ -341,7 +358,8 @@
                                     <td>{{ hora }}</td>
                                     <td *ngFor="let dia of infoGrupo.dias" class="horario-cell">
                                         <span *ngFor="let horario of jsonHorario">
-                                            <span *ngIf="horario.dia == dia && horario.hora == hora" class="badge text-bg-success">✔</span>
+                                            <span *ngIf="horario.dia == dia && horario.hora == hora"
+                                                class="badge text-bg-success">✔</span>
                                         </span>
                                     </td>
                                 </tr>
