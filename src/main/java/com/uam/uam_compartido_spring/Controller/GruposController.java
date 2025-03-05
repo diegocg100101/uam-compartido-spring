@@ -121,6 +121,7 @@ public class GruposController {
     @PostMapping("/edit")
     public ResponseEntity<String> edit(@RequestBody Grupo grupo) {
         if (grupoRepository.existsById(grupo.getClaveGrupo())){
+            if(grupo.getHorarioList() != null) grupo.convertirHorarioAJson();
             grupoRepository.save(grupo);
             return ResponseEntity.ok("Grupo editada");
         } else {
