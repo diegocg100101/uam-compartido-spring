@@ -2,9 +2,11 @@
 Este proyecto es una API desarrollada principalmente para gestionar los grupos compartidos de UAM. Una implementación del cliente que consume esta API se puede encontrar en el repositorio [Cliente UAM Compartido](https://github.com/diegocg100101/uam-compartido-angular). Esta API se puede consumir desde una aplicación web, desktop o móvil.
 
 ## Tecnologías
+- Java (OpenJDK v17.0.13)
+- Apache Tomcat (v10.1.34)
 - Spring
 - Spring Security
-- Spring Boot
+- Spring Boot (v3.4.2)
 - JWT
 - Hibernate
 - Lombok
@@ -32,7 +34,25 @@ Este proyecto requiere de una base de datos en MariaDB, por lo que dentro del di
 > spring.datasource.password=<contraseña>
 > ```
 
-### 3. Compilación del proyecto
+### 3. Modificación del CORS
+En el archivo **SecurityConfig.java** ubicado en **Config** se debe modificar el **Bean** del CorsFilter para permitir peticiones de la dirección IP y puerto en la que se encuentra el cliente.
+
+```java
+@Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://<direccion_ip>:<puerto>")); // Modificación a realizar
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowCredentials(true);
+
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+```
+
+### 4. Compilación del proyecto
 
 Para Compilar el proyecto, se debe ejecutar el siguiente comando desde la terminal posicionada en el directorio del proyecto.
 
@@ -41,7 +61,7 @@ Para Compilar el proyecto, se debe ejecutar el siguiente comando desde la termin
 ```
 Este comando permitirá analizar y compilar todas las dependencias Maven del proyecto.
 
-### 4. Ejecutar servidor web
+### 5. Ejecutar servidor web
 
 Para correr la aplicación, se requiere ejecutar el siguiente comando.
 

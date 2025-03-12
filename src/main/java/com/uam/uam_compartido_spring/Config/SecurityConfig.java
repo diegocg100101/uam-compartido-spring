@@ -37,7 +37,9 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/grupos/**", "/uea/**").authenticated()
+                        .requestMatchers("/grupos/add", "/grupos/edit/**", "/grupos/delete/**",
+                                "/grupos/share/**", "/uea/add", "/uea/edit/**", "/uea/delete/**", "/uea/share/**", "/user/all").hasRole("ADMIN")
+                        .requestMatchers("/grupos/list", "/uea/list", "/user/me").authenticated()
                         .requestMatchers("/**").permitAll()
                         .anyRequest()
                         .authenticated()
