@@ -102,3 +102,15 @@ Este comando ejecutará el servidor web, permitiendo que se procesen solicitudes
 ## Implementación Web App
 El siguiente diagrama muestra la implementación de una aplicación web con la API y un [cliente en Angular](https://github.com/diegocg100101/uam-compartido-angular). Por el momento, se deben clonar ambos repositorios y ejecutarse en una máquina local para observar su funcionamiento.
 ![Diagrama](img-doc/app.png)
+
+
+## Diagramas
+
+### Base de datos
+ ![Base de datos](img-doc/Base%20de%20datos.png)
+ 
+### Modelos
+![Modelos](img-doc/Models.png)
+
+### DTO
+![DTO](img-doc/DTO.png)
