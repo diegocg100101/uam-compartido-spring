@@ -153,6 +153,7 @@ public class GruposController {
                 grupoCompartido.setSalon(grupo.getSalon());
                 grupoCompartido.setInscritos(grupo.getInscritos());
                 grupoCompartido.setCupoUnidad(grupo.getCupoUnidad());
+                grupoCompartido.setTrimestreestacion(grupo.getTrimestreestacion());
 
                 // Añade la unidad correspondiente al id
                 grupoCompartido.setUnidad(unidad);

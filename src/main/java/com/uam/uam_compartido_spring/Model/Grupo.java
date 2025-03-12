@@ -51,6 +51,9 @@ public class Grupo {
     @Column(name = "inscritos")
     private int inscritos;
 
+    @Column(name = "trimestreestacion")
+    private String trimestreestacion;
+
     public Grupo() {
         this.unidad = new Unidad();
         this.profesor = new Usuario();
