@@ -10,7 +10,7 @@ Este proyecto es una API desarrollada principalmente para gestionar los grupos c
 - JWT
 - Hibernate
 - Lombok
-- MariaDB
+- MariaDB (v11.4.5)
 
 ## Instalación
 
