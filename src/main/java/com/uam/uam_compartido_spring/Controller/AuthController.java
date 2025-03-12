@@ -11,6 +11,9 @@ import com.uam.uam_compartido_spring.Repository.DivisionRepository;
 import com.uam.uam_compartido_spring.Repository.UnidadRepository;
 import com.uam.uam_compartido_spring.Repository.UsuarioRepository;
 import com.uam.uam_compartido_spring.Service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +44,11 @@ public class AuthController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+
+    @Operation(summary = "Alta de usuario", description = "Devuelve un JSON con todas las unidades en la base de datos, todas las divisiones y todos los departamentos.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Unidades, divisiones, departamentos de la base de datos"),
+    })
     @GetMapping("/signup")
     public ResponseEntity<Map<String, Object>> signup() {
         Map<String, Object> response = new HashMap<>();
